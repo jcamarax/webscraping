@@ -12,7 +12,8 @@ url2 = 'https://www.seloger.com/list.htm?projects=1&types=1%2C2&places=%5B%7Bcp%
 # Creer les URL pour les 20 premieres pages de resultats
 url20 = [url2[:-1] + str(i) for i in range(1, 21)]
 
-
+#test
+lolol 
 # STEP 2 extract all URL from page
 
 def return_all_ads_frompage(url):
