@@ -6,6 +6,7 @@ from bs4 import BeautifulSoup
 from datetime import datetime
 import time
 
+
 # Url pour trouver tous les apparts sur paris en location, prix par mois < 1500 euros
 url2 = 'https://www.seloger.com/list.htm?projects=1&types=1%2C2&places=%5B%7Bcp%3A75%7D%5D&price=NaN%2F1500&enterprise=0&qsVersion=1.0&LISTING-LISTpg=2'
 
