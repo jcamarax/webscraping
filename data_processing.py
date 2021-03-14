@@ -1,16 +1,13 @@
 #Load packages
 import pickle5 as pickle
-from bs4 import BeautifulSoup
-import re
 import os
 import requests
+import re
 import numpy as np
-from collections import Counter
-from nltk.tokenize import word_tokenize
-from nltk.corpus import stopwords
-import matplotlib.pyplot as plt
-import pandas as pd
-import seaborn as sns
+from bs4 import BeautifulSoup
+from datetime import datetime
+import time
+
 
 #Load class soup_data
 class soup_data:
@@ -50,3 +47,61 @@ class soup_data:
         self.reference = " ".join(self.soup.find('div', class_="SubHeaderstyled__Reference-sc-1s8qndx-7 sWNHa").strings)
         self.location = " ".join(self.soup.find(id="summary-address").parent.strings)
         self.date_scrape = datetime.today().strftime('%d-%m-%Y')
+
+def extract(param, text):
+    '''Function to return a specific number of units (number of bathrooms, rooms) in the soup_data.general
+    Parameters:
+        param: regex to to find
+        text: text to scrap in this instance soup_data.general
+    Examples:
+    for number of roooms param = "pièce"
+    for number of toilets param = "toilette"
+    '''
+    info = re.search("(\d*,?\d+) ?(?="+param+")", text.lower())
+    try:
+        return re.sub(",",".",info.group(1))
+    except:
+        return "NaN"
+      
+def price(param, text):
+    '''Function to return a specific fee in the soup_data.priceblock
+    Parameters:
+        param: regex to find
+        text: text to scrap in soup_data.priceblock
+        
+    Examples:
+    for rent param = "le loyer mensuel"
+    for deposit param = "dépôt"
+    for agency fees param = "à la charge"
+    '''
+    fees = re.search(param+".+?(\d+,?\d+)",text.lower())
+    try:
+        return re.sub(",",".",fees.group(1)) #RE to make sure the decimal operator are point.
+    except:
+        return "NaN"
+
+def specific(param,text):
+    '''Function to return True if the word param is in the soup_data.general
+    Parameters:
+        param: regex to find
+        text: text to scrap in soup_data.general
+        
+    Examples:
+    for meublé param = "meublé"
+    '''
+    info = re.search(param,text)
+    return bool(info)
+
+def location(text):
+    '''Function that returns the name of the neighbourhood  and the arrondissement in the soup_data.location
+        Parameters:
+            text: text to scrap in soup_data.location
+   
+    '''
+    match = re.search("quartier\s+(.+)\s+?,.*?(\d+)",text.lower())
+    try:
+        quartier =  match.group(1)
+        arrond = re.sub(",",".",match.group(2))
+        return (quartier, float(arrond))
+    except:
+        return ("NaN", float("NaN"))
