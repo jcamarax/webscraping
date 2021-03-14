@@ -7,6 +7,7 @@ import numpy as np
 from bs4 import BeautifulSoup
 from datetime import datetime
 import time
+import numpy as np
 
 
 #Load class soup_data
@@ -102,6 +103,6 @@ def location(text):
     try:
         quartier =  match.group(1)
         arrond = re.sub(",",".",match.group(2))
-        return (quartier, float(arrond))
+        return (quartier, int(arrond))
     except:
-        return ("NaN", float("NaN"))
+        return ("NaN", int(np.nan))
